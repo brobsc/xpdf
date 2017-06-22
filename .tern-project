@@ -1,0 +1,17 @@
+{
+  "libs": [
+    "browser",
+    "ecmascript"
+  ],
+  "loadEagerly": [
+    "./src/"
+  ],
+  "plugins": {
+    "webpack": {
+      "configPath": "./.electron-vue/webpack.renderer.config.js"
+    },
+    "node": {},
+    "modules": {},
+    "es_modules": {}
+  }
+}

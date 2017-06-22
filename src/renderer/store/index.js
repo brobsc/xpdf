@@ -22,5 +22,8 @@ export default new Vuex.Store({
     addFile(state, file) {
       state.files.push(file);
     },
+    clearFiles(state) {
+      state.files = [];
+    },
   },
 });

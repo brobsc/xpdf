@@ -1,11 +1,17 @@
 <template lang='pug'>
   div
-    h1 Hello Semantic3
-    p {{ files.length }}
-    ul
-      li(v-for='file in files')
-        p {{ file.path }}
-    p {{ files }}
+    h1 xPDF
+    p Number of files: {{ files.length }}
+    div
+      ul.ui.list
+        .item(v-for='file in files')
+          i.file.icon
+          .content
+            .header {{ file.name }}
+            .description {{ file.path}}
+    div
+      button.ui.primary.button Bundle
+      button.ui.button(@click='clearFiles') Clear
 </template>
 
 <script>
@@ -16,6 +22,12 @@
       },
     },
     methods: {
+      clearFiles() {
+        this.$store.commit('clearFiles');
+      },
+      bundle() {
+
+      },
     },
   };
 </script>

@@ -11,7 +11,5 @@
   margin: 0px;
   padding: 48px;
   height: 100%;
-  background: #7022b2;
-  color: white;
 }
 </style>

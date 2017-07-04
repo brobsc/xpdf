@@ -1,23 +1,22 @@
-import fileType from 'file-type';
-import readChunk from 'read-chunk';
-
 export default {
   name: 'xpdf',
   methods: {
     addFiles(e) {
       const filesToAdd = e.dataTransfer.files;
+
       for (let i = 0; i < filesToAdd.length; i += 1) {
         const f = filesToAdd.item(i);
         if (this.isMissing(f) && this.isAcceptable(f)) {
+          console.log(f); // eslint-disable-line
           this.$store.commit('addFile', f);
         }
       }
     },
 
     isAcceptable(file) {
-      const chunk = readChunk.sync(file.path, 0, 4100);
+      const chunk = this.$readChunk.sync(file.path, 0, 4100);
+      const ext = this.$fileType(chunk).ext;
       const acceptable = this.$store.state.acceptableExts;
-      const ext = fileType(chunk).ext;
 
       return acceptable.includes(ext);
     },

@@ -1,16 +1,21 @@
 <template lang='pug'>
-  .columns.is-multiline.is-mobile
-    .column.is-one-quarter(v-for='file in files')
-      .card
-        .card-image
-          img(:src="'file:///' + file.path")
-        .card-content
-          .title.is-4.is-spaced.is-marginless
-            | {{ file.name }}
-          .subtitle.is-6.is-pulled-right {{ file.size | prettyBytes }}
-          .subtitle.is-6 {{ file.type }}
-          .card-footer
-            a.card-footer-item.is-paddingless(@click='removeFile(file)') Remove
+  div
+    .columns
+      .column
+        b-pagination(:total='files.length' :current.sync='current' :per-page='perPage'
+                    :size='size' :order='order' :simple='true')
+    .columns.is-multiline.is-mobile
+      .column.is-one-quarter(v-for='file in currentFiles')
+        .card
+          .card-image
+            img(:src="'file:///' + file.path")
+          .card-content
+            .title.is-4.is-spaced.is-marginless
+              | {{ file.name }}
+            .subtitle.is-6.is-pulled-right {{ file.size | prettyBytes }}
+            .subtitle.is-6 {{ file.type }}
+            .card-footer
+              a.card-footer-item.is-paddingless(@click='removeFile(file)') Remove
 </template>
 
 <script>
@@ -21,6 +26,25 @@
       files() {
         return this.$store.state.files;
       },
+
+      currentFiles() {
+        const current = this.current;
+        const start = (current - 1) * 8;
+        const end = start + 8;
+        if (end >= this.files.length) {
+          return this.files.slice(start, this.files.length);
+        }
+        return this.files.slice(start, end);
+      },
+    },
+
+    data() {
+      return {
+        current: 1,
+        size: 'is-small',
+        perPage: 8,
+        order: 'is-centered',
+      };
     },
 
     methods: {

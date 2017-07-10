@@ -1,16 +1,16 @@
 import Vue from 'vue';
 import fileType from 'file-type';
 import readChunk from 'read-chunk';
+import Buefy from 'buefy';
 
 import App from './App';
 import router from './router';
 import store from './store';
 
-import '../../semantic/dist/semantic.css';
-// import '../../semantic/dist/semantic.js';
-
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'));
 Vue.config.productionTip = false;
+
+Vue.use(Buefy, { defaultIconPack: 'fa' });
 
 /* eslint-disable no-new */
 new Vue({

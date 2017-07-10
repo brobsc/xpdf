@@ -6,7 +6,24 @@
 <script src='./App.vue.js'>
 </script>
 
-<style>
+<style lang='scss'>
+@import '~bulma/sass/utilities/_all';
+
+// Set custom here
+//
+//
+
+@import '~bulma';
+@import '~buefy/src/scss/buefy';
+
+body {
+  margin: 0px;
+  height: 100%;
+  width: 100%;
+  padding: 0px;
+  position: fixed;
+  overflow: scroll;
+};
 #app {
   margin: 0px;
   padding: 48px;

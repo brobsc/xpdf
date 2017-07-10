@@ -1,9 +1,17 @@
 <template lang='pug'>
-  div
-    h1 sPDF
-    p Number of files: {{ files.length }}
-    preview-cards
-    bundler-buttons
+  .container
+    .columns.is-mobile
+      .column
+        h1.title sPDF
+        p Files: {{ files.length }}
+      .column
+        h1.title Settings
+    .columns.is-mobile
+      .column
+        preview-cards
+    .columns.is-mobile
+      .column
+        bundler-buttons
 </template>
 
 <script>

@@ -25,5 +25,9 @@ export default new Vuex.Store({
     clearFiles(state) {
       state.files = [];
     },
+    removeFile(state, file) {
+      const index = state.files.indexOf(file);
+      state.files.splice(index, 1);
+    },
   },
 });

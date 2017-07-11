@@ -4,8 +4,9 @@
       .column
         b-pagination(:total='files.length' :current.sync='current' :per-page='perPage'
                     :size='size' :order='order' :simple='true')
-    .columns.is-multiline.is-mobile
-      .column.is-one-quarter(v-for='file in currentFiles')
+    .columns.is-multiline.is-mobile.dragula-container(v-dragula='currentFiles' drake='currentFiles'
+        v-on:dropModel='log(e)')
+      .column.is-one-quarter(v-for='file in currentFiles' :key='file')
         .card
           .card-image
             img(:src="'file:///' + file.path")
@@ -27,14 +28,18 @@
         return this.$store.state.files;
       },
 
-      currentFiles() {
-        const current = this.current;
-        const start = (current - 1) * 8;
-        const end = start + 8;
-        if (end >= this.files.length) {
-          return this.files.slice(start, this.files.length);
-        }
-        return this.files.slice(start, end);
+      currentFiles: {
+        get() {
+          if (this.files.length <= 0) return [];
+          const current = this.current;
+          const step = this.perPage;
+          const start = (current - 1) * step;
+          const end = start + step;
+          if (end >= this.files.length) {
+            return this.files.slice(start, this.files.length);
+          }
+          return this.files.slice(start, end);
+        },
       },
     },
 
@@ -51,6 +56,27 @@
       removeFile(file) {
         this.$store.commit('removeFile', file);
       },
+
+      changeIndex(args) {
+        const previous = args.dragIndex;
+        const newValue = args.dropIndex;
+        const current = this.current;
+        const step = this.perPage;
+        this.$store.commit('changeIndex', [previous, newValue, current, step]);
+      },
+    },
+
+    created() {
+      const $service = this.$dragula.$service;
+
+      $service.options('currentFiles', {
+        direction: 'horizontal',
+        isContainer(el) {
+          return el.classList.contains('dragular-container');
+        },
+      });
+
+      $service.eventBus.$on('dropModel', (args) => { this.changeIndex(args) }); // eslint-disable-line
     },
   };
 </script>

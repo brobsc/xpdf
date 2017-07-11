@@ -29,5 +29,10 @@ export default new Vuex.Store({
       const index = state.files.indexOf(file);
       state.files.splice(index, 1);
     },
+    changeIndex(state, [oldIndex, newIndex, current, step]) {
+      const from = oldIndex + ((current - 1) * step);
+      const to = newIndex + ((current - 1) * step);
+      state.files.splice(to, 0, state.files.splice(from, 1)[0]);
+    },
   },
 });

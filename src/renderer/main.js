@@ -2,6 +2,7 @@ import Vue from 'vue';
 import fileType from 'file-type';
 import readChunk from 'read-chunk';
 import Buefy from 'buefy';
+import { Vue2Dragula } from 'vue2-dragula';
 
 import App from './App';
 import router from './router';
@@ -11,6 +12,7 @@ if (!process.env.IS_WEB) Vue.use(require('vue-electron'));
 Vue.config.productionTip = false;
 
 Vue.use(Buefy, { defaultIconPack: 'fa' });
+Vue.use(Vue2Dragula, { logging: { service: false } });
 
 /* eslint-disable no-new */
 new Vue({

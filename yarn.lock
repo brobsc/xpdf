@@ -292,6 +292,10 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
+atoa@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/atoa/-/atoa-1.0.0.tgz#0cc0e91a480e738f923ebc103676471779b34a49"
+
 autoprefixer@^6.3.1:
   version "6.7.7"
   resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-6.7.7.tgz#1dbd1c835658e35ce3f9984099db00585c782014"
@@ -1755,6 +1759,13 @@ content-type@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/content-type/-/content-type-1.0.2.tgz#b7d113aee7a8dd27bd21133c4dc2529df1721eed"
 
+contra@1.9.4:
+  version "1.9.4"
+  resolved "https://registry.yarnpkg.com/contra/-/contra-1.9.4.tgz#f53bde42d7e5b5985cae4d99a8d610526de8f28d"
+  dependencies:
+    atoa "1.0.0"
+    ticky "1.0.1"
+
 convert-source-map@^1.1.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.5.0.tgz#9acd70851c6d5dfdd93d9282e5edf94a03ff46b5"
@@ -1872,6 +1883,12 @@ cross-spawn@^5.0.1, cross-spawn@^5.1.0:
 cross-unzip@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/cross-unzip/-/cross-unzip-0.0.2.tgz#5183bc47a09559befcf98cc4657964999359372f"
+
+crossvent@1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/crossvent/-/crossvent-1.5.4.tgz#da2c4f8f40c94782517bf2beec1044148194ab92"
+  dependencies:
+    custom-event "1.0.0"
 
 cryptiles@2.x.x:
   version "2.0.5"
@@ -1999,6 +2016,10 @@ currently-unhandled@^0.4.1:
   resolved "https://registry.yarnpkg.com/currently-unhandled/-/currently-unhandled-0.4.1.tgz#988df33feab191ef799a61369dd76c17adf957ea"
   dependencies:
     array-find-index "^1.0.1"
+
+custom-event@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/custom-event/-/custom-event-1.0.0.tgz#2e4628be19dc4b214b5c02630c5971e811618062"
 
 d@1:
   version "1.0.0"
@@ -2233,6 +2254,13 @@ dot-prop@^4.1.0:
   resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-4.1.1.tgz#a8493f0b7b5eeec82525b5c7587fa7de7ca859c1"
   dependencies:
     is-obj "^1.0.0"
+
+dragula@3.7.2:
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/dragula/-/dragula-3.7.2.tgz#4a35c9d3981ffac1a949c29ca7285058e87393ce"
+  dependencies:
+    contra "1.9.4"
+    crossvent "1.5.4"
 
 duplexer3@^0.1.4:
   version "0.1.4"
@@ -4262,6 +4290,10 @@ lodash.merge@^3.3.2:
     lodash.keysin "^3.0.0"
     lodash.toplainobject "^3.0.0"
 
+lodash.merge@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.0.tgz#69884ba144ac33fe699737a6086deffadd0f89c5"
+
 lodash.mergewith@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.mergewith/-/lodash.mergewith-4.6.0.tgz#150cf0a16791f5903b8891eab154609274bdea55"
@@ -4437,11 +4469,7 @@ miller-rabin@^4.0.0:
     bn.js "^4.0.0"
     brorand "^1.0.1"
 
-"mime-db@>= 1.27.0 < 2":
-  version "1.28.0"
-  resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.28.0.tgz#fedd349be06d2865b7fc57d837c6de4f17d7ac3c"
-
-mime-db@~1.27.0:
+"mime-db@>= 1.27.0 < 2", mime-db@~1.27.0:
   version "1.27.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.27.0.tgz#820f572296bbd20ec25ed55e5b5de869e5436eb1"
 
@@ -6529,6 +6557,10 @@ thunky@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/thunky/-/thunky-0.1.0.tgz#bf30146824e2b6e67b0f2d7a4ac8beb26908684e"
 
+ticky@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/ticky/-/ticky-1.0.1.tgz#b7cfa71e768f1c9000c497b9151b30947c50e46d"
+
 timed-out@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/timed-out/-/timed-out-4.0.1.tgz#f32eacac5a175bea25d7fab565ab3ed8741ef56f"
@@ -6883,6 +6915,13 @@ vue-template-compiler@^2.3.3:
 vue-template-es2015-compiler@^1.2.2:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.5.2.tgz#a0a6c50c941d2a4abda963f2f42c337ac450ee95"
+
+vue2-dragula@^2.4.4:
+  version "2.4.4"
+  resolved "https://registry.yarnpkg.com/vue2-dragula/-/vue2-dragula-2.4.4.tgz#77da3beb4699efafd58f86055ff7158bd9b7be5f"
+  dependencies:
+    dragula "3.7.2"
+    lodash.merge "^4.6.0"
 
 vue@^2.3.3:
   version "2.3.4"

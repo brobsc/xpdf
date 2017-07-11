@@ -1,11 +1,11 @@
 <template lang='pug'>
-  div
+  .container
     .columns
       .column
         b-pagination(:total='files.length' :current.sync='current' :per-page='perPage'
-                    :size='size' :order='order' :simple='true')
-    .columns.is-multiline.is-mobile.dragula-container(v-dragula='currentFiles' drake='currentFiles'
-        v-on:dropModel='log(e)')
+        :size='size' :order='order' :simple='true' :class='{ "is-invisible": !needsPagination }')
+    .columns.is-multiline.is-mobile.dragula-container.fixed-height(v-dragula='currentFiles'
+                                      drake='currentFiles' :class='{ "drop-area": isEmpty }')
       .column.is-one-quarter(v-for='file in currentFiles' :key='file')
         .card
           .card-image
@@ -23,9 +23,25 @@
   export default {
     name: 'preview-cards',
 
+    watch: {
+      current() {
+        if (this.current <= 0) {
+          this.current = 1;
+        }
+      },
+    },
+
     computed: {
       files() {
         return this.$store.state.files;
+      },
+
+      isEmpty() {
+        return this.files.length === 0;
+      },
+
+      needsPagination() {
+        return this.files.length > 8;
       },
 
       currentFiles: {
@@ -82,6 +98,14 @@
 </script>
 
 <style lang='scss' scoped>
+.card-image {
+  background-color: #cbcbcb;
+  height: 150px;
+};
+img {
+  max-height: 100%;
+  width: 100%;
+};
 .card-footer-item {
   color: red;
   font-size: 8px;
@@ -103,5 +127,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+};
+.fixed-height {
+  height: 430px !important;
+};
+.drop-area {
+  width: 100%;
+  position: relative;
+  border: 2px dashed #cbcbcb;
+};
+.is-invisible {
+  visibility: collapse;
 };
 </style>

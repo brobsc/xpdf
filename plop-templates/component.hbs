@@ -1,0 +1,24 @@
+<template lang='pug'>
+  .title
+    h1 {{titleCase name}}
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        name: '{{dashCase name}}',
+      };
+    },
+
+    methods: {
+    },
+  };
+</script>
+
+<style lang='scss' scoped>
+  .title {
+    font-weight: bold;
+  }
+</style>
+

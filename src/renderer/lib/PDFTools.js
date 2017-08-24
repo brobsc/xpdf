@@ -1,12 +1,13 @@
 import execa from 'execa';
 
 export default {
-  optimize(file, quality = 90) {
+  optimize(file, quality = 99) {
     // TODO: Make temp path
     const newPath = `/Users/bruno/Desktop/${file.name}`;
 
     execa.shellSync(`gm convert -size 595x842 '${file.path}'\
           -background white\
+          -compress JPEG\
           -gravity center\
           -rotate '90>'\
           -geometry '595x842>'\
@@ -24,7 +25,7 @@ export default {
     let contrastString = '';
     const allPaths = images.map(image => `'${image}' `).join('');
 
-    if (contrast) contrastString = '-contrast -contrast';
+    if (contrast) contrastString = '+contrast +contrast';
 
     const command = `gm convert\
           ${allPaths}\

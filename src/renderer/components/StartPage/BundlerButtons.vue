@@ -21,11 +21,12 @@
       quality() {
         return this.$store.state.quality;
       },
+      contrast() {
+        return this.$store.state.applyContrast;
+      },
     },
 
     methods: {
-      showPDF: true,
-
       clearFiles() {
         this.$store.commit('clearFiles');
       },
@@ -39,7 +40,7 @@
 
         files.forEach(file => images.push(tools.optimize(file)));
 
-        tools.convert(images, this.quality);
+        tools.convert(images, this.quality, this.contrast);
       },
     },
   };

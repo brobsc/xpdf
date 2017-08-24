@@ -6,8 +6,11 @@
         p Files: {{ files.length }}
       .column
         h1.title Settings
-          b-field(label='Quality')
-            b-input(size='is-small' icon='level-up' v-model='quality' type='number' max='100' min='1')
+        b-field(label='Quality')
+          b-input(size='is-small' icon='level-up' v-model='quality' type='number' max='100' min='1')
+        b-field
+          b-checkbox(v-model='contrast')
+            | Contrast
     .columns.is-mobile
       .column
         preview-cards
@@ -37,6 +40,14 @@
         },
         set(val) {
           this.$store.commit('changeQuality', val);
+        },
+      },
+      contrast: {
+        get() {
+          return this.$store.state.applyContrast;
+        },
+        set(val) {
+          this.$store.commit('changeContrast', val);
         },
       },
     },

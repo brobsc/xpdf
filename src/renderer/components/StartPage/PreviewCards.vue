@@ -46,14 +46,17 @@
 
       currentFiles: {
         get() {
-          if (this.files.length <= 0) return [];
+          if (this.files.length <= 0) return []; // Bail out if empty. Improves perfomance.
+
           const current = this.current;
           const step = this.perPage;
           const start = (current - 1) * step;
           const end = start + step;
+
           if (end >= this.files.length) {
             return this.files.slice(start, this.files.length);
           }
+
           return this.files.slice(start, end);
         },
       },
@@ -78,6 +81,7 @@
         const newValue = args.dropIndex;
         const current = this.current;
         const step = this.perPage;
+
         this.$store.commit('changeIndex', [previous, newValue, current, step]);
       },
     },
@@ -98,45 +102,55 @@
 </script>
 
 <style lang='scss' scoped>
-.card-image {
-  background-color: #cbcbcb;
-  height: 150px;
-};
-img {
-  max-height: 100%;
-  width: 100%;
-};
-.card-footer-item {
-  color: red;
-  font-size: 8px;
-};
-.card-content {
-  padding: 4px;
-};
-.is-4 {
-  font-size: 12px;
-};
-.is-6 {
-  font-size: 8px;
-  margin-bottom: 4px;
-};
-.column {
-  padding: 5px;
-};
-.title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-};
-.fixed-height {
-  height: 430px !important;
-};
-.drop-area {
-  width: 100%;
-  position: relative;
-  border: 2px dashed #cbcbcb;
-};
-.is-invisible {
-  visibility: collapse;
-};
+  .card-image {
+    background-color: #cbcbcb;
+    height: 150px;
+  };
+
+  img {
+    max-height: 100%;
+    width: 100%;
+  };
+
+  .card-footer-item {
+    color: red;
+    font-size: 8px;
+  };
+
+  .card-content {
+    padding: 4px;
+  };
+
+  .is-4 {
+    font-size: 12px;
+  };
+
+  .is-6 {
+    font-size: 8px;
+    margin-bottom: 4px;
+  };
+
+  .column {
+    padding: 5px;
+  };
+
+  .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  };
+
+  .fixed-height {
+    height: 430px !important;
+  };
+
+  .drop-area {
+    width: 100%;
+    position: relative;
+    border: 2px dashed #cbcbcb;
+  };
+
+  .is-invisible {
+    visibility: collapse;
+  };
 </style>

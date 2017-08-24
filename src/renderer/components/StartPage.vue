@@ -6,6 +6,8 @@
         p Files: {{ files.length }}
       .column
         h1.title Settings
+          b-field(label='Quality')
+            b-input(size='is-small' icon='level-up' v-model='quality' type='number' max='100' min='1')
     .columns.is-mobile
       .column
         preview-cards
@@ -28,6 +30,14 @@
     computed: {
       files() {
         return this.$store.state.files;
+      },
+      quality: {
+        get() {
+          return this.$store.state.quality;
+        },
+        set(val) {
+          this.$store.commit('changeQuality', val);
+        },
       },
     },
   };

@@ -17,6 +17,12 @@
       };
     },
 
+    computed: {
+      quality() {
+        return this.$store.state.quality;
+      },
+    },
+
     methods: {
       showPDF: true,
 
@@ -33,7 +39,7 @@
 
         files.forEach(file => images.push(tools.optimize(file)));
 
-        tools.convert(images, 90);
+        tools.convert(images, this.quality);
       },
     },
   };

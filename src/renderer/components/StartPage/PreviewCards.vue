@@ -1,5 +1,5 @@
 <template lang='pug'>
-  .container
+  div
     .columns
       .column
         b-pagination(:total='files.length' :current.sync='current' :per-page='perPage'

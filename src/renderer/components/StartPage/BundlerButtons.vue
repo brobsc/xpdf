@@ -1,9 +1,10 @@
 <template lang='pug'>
   div
-    div
-      button.ui.primary.button(@click='generatePreview') Preview
-      button.ui.button(@click='clearFiles') Clear
-      button.ui.button(@click='bundle') Bundle
+    .field.is-grouped
+      p.control
+        button.is-outlined.is-small.is-primary.button(@click='generatePreview') Preview
+      p.control
+        button.is-small.button(@click='clearFiles') Clear
     canvas#pdfPreview
 </template>
 

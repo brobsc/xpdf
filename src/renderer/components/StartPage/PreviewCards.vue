@@ -9,7 +9,7 @@
       .column.is-one-quarter(v-for='file in currentFiles' :key='file')
         .card
           .card-image
-            img(:src="'file:///' + file.path")
+            img(:src="'file:///' + file.realPath")
           .card-content
             .title.is-4.is-spaced.is-marginless
               | {{ file.name }}

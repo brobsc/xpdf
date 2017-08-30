@@ -10,3 +10,4 @@ thumbs.db
 !.gitkeep
 semantic
 yarn-error.log
+**/pdfbox-*

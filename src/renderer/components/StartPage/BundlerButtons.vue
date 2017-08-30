@@ -5,6 +5,8 @@
         button.is-outlined.is-small.is-primary.button(@click='generatePreview') Preview
       p.control
         button.is-small.button(@click='clearFiles') Clear
+      p.control
+        button.is-small.button(@click='unbundle') Unbundle
     canvas#pdfPreview
 </template>
 
@@ -32,7 +34,25 @@
         this.$store.commit('clearFiles');
       },
 
-      bundle() {
+      unbundle() {
+        const files = this.$store.state.files;
+
+        files.forEach((file) => {
+          const chunk = this.$readChunk.sync(file.realPath, 0, 4100);
+          const ext = this.$fileType(chunk).ext;
+
+          if (ext === 'pdf') {
+            const list = tools.extractPDF(file);
+
+            list.forEach((image) => {
+              this.$store.commit('addFile', image);
+            });
+
+            this.$store.commit('removeFile', file);
+
+            console.log(list); // eslint-disable-line
+          }
+        });
       },
 
       generatePreview() {

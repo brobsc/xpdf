@@ -110,10 +110,11 @@ export default {
     const pdfbox = __dirname + '/pdfbox-app-2.0.6.jar'; // eslint-disable-line
     let resultImages = [];
 
-    execa.shellSync(`java -jar ${pdfbox} PDFToImage -outputPrefix '${newPath}/' '${file.realPath}'`);
+    execa.shellSync(`java -jar ${pdfbox} PDFToImage -outputPrefix '${newPath}/${name}-' '${file.realPath}'`);
 
-    fs.readdirSync(newPath).forEach((file) => {
-      const filePath = `${newPath}/${file}`;
+    fs.readdirSync(newPath).forEach((newFile) => {
+      // TODO: Check if file is a valid image
+      const filePath = `${newPath}/${newFile}`;
       resultImages.push(filePath);
     });
 

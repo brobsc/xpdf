@@ -78,18 +78,31 @@ export default {
     return result;
   },
 
-  getFileName(path) {
+  getFileNameAndExtension(path) {
     // const regex = /.*\/(.*)\./;
     const regex = /.*\/(.*)/;
+    const nameAndExt = path.match(regex)[1];
+
+    return nameAndExt;
+  },
+
+  getFileName(path) {
+    const regex = /.*\/(.*)\..*/;
     const name = path.match(regex)[1];
 
     return name;
   },
 
+  getDirectory(path) {
+    const regex = /(.*\/).*/;
+    const dir = path.match(regex)[1];
+
+    return dir;
+  },
+
   extractPDF(file) {
     console.log(file); // eslint-disable-line
-    const regex = /(^.*)\./;
-    const name = file.name.match(regex)[1];
+    const name = this.getFileName(file.path);
     const newPath = `/Users/bruno/Desktop/temps/extracted/${name}`;
     if (!fs.existsSync(newPath)) {
       fs.mkdirSync(newPath);
@@ -113,7 +126,7 @@ export default {
 
     resultImages.forEach((img) => {
       const contents = fs.readFileSync(img, { encoding: 'utf-8' });
-      const fileName = this.getFileName(img);
+      const fileName = this.getFileNameAndExtension(img);
       const f = new File([contents], fileName, {
         type: 'image/jpg',
       });

@@ -18,7 +18,7 @@ export default new Vuex.Store({
       'png',
     ],
     quality: 90,
-    applyContrast: 1,
+    applyContrast: 'none',
   },
   mutations: {
     addFile(state, file) {

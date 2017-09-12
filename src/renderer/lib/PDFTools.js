@@ -2,7 +2,23 @@ import execa from 'execa';
 import fs from 'fs';
 
 export default {
-  optimize(file, quality = 99) {
+  optionsConstructor(opt, user) {
+    if (user === {}) return opt;
+
+    Object.keys(user).forEach((key) => {
+      opt[key] = user[key];
+    });
+
+    return opt;
+  },
+
+  optimize(file, userOptions = {}) {
+    let options = {
+      quality: 99,
+    };
+
+    options = this.optionsConstructor(options, userOptions);
+
     // TODO: Make temp path
     const newPath = `/Users/bruno/Desktop/temps/${file.name}`;
 
@@ -15,13 +31,20 @@ export default {
           -extent 595x842\
           -density 150x150\
           -resample 150x150\
-          -quality ${quality}\
+          -quality ${options.quality}\
           '${newPath}'`);
 
     return newPath;
   },
 
-  convert(images, quality = 40, contrast = 1) {
+  convert(images, userOptions = {}) {
+    let options = {
+      quality: 40,
+      contrast: 'normal',
+    };
+
+    options = this.optionsConstructor(options, userOptions);
+    // 40, 1
     // Contrast = 0 --
     // Contrast = 1 NONE
     // Contrast = 2 ++
@@ -31,18 +54,18 @@ export default {
     let contrastString = '';
     const allPaths = images.map(image => `'${image}' `).join('');
 
-    if (contrast <= 0) contrastString = '-contrast -contrast';
-    else if (contrast === '1') contrastString = '';
-    else contrastString = '+contrast +contrast';
+    if (options.contrast === 'decrease') contrastString = '-contrast -contrast';
+    else if (options.contrast === 'increase') contrastString = '+contrast +contrast';
 
-    console.log('Current contrast = ' + contrast); // eslint-disable-line
-    console.log('Current quality = ' + quality); // eslint-disable-line
+    console.log('Default options = ' + JSON.stringify(options)); // eslint-disable-line
+    console.log('Current options = ' + JSON.stringify(options)); // eslint-disable-line
+    console.log(contrastString); // eslint-disable-line
 
     const command = `gm convert\
           ${allPaths}\
           ${contrastString}\
           -compress JPEG\
-          -quality ${quality}\
+          -quality ${options.quality}\
           /Users/bruno/Desktop/temp.pdf`;
 
     execa.shellSync(command);

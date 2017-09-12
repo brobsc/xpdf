@@ -61,7 +61,7 @@
 
         files.forEach(file => images.push(tools.optimize(file)));
 
-        tools.convert(images, this.quality, this.contrast);
+        tools.convert(images, { quality: this.quality, contrast: this.contrast });
       },
     },
   };

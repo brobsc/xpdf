@@ -4,7 +4,10 @@
     b-field(label='Quality' grouped)
       b-input(size='is-small' icon='level-up' v-model='quality' type='number' max='100' min='1')
     b-field(label='Contrast' grouped)
-      b-input(size='is-small' icon='adjust' v-model='contrast' type='number' max='2' min='0')
+      b-select(size='is-small' icon='adjust' v-model='contrast')
+        option(v-for='option of contrastOptions'
+               :value='option' :key='option')
+          | {{option}}
 </template>
 
 <script>
@@ -12,6 +15,11 @@
     data() {
       return {
         name: 'settings-panel',
+        contrastOptions: [
+          'decrease',
+          'none',
+          'increase',
+        ],
       };
     },
 

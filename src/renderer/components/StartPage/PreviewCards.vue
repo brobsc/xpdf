@@ -6,7 +6,7 @@
         :size='size' :order='order' :simple='true' :class='{ "is-invisible": !needsPagination }')
     .columns.is-multiline.is-mobile.dragula-container.fixed-height(v-dragula='currentFiles'
                                       drake='currentFiles' :class='{ "drop-area": isEmpty }')
-      .column.is-one-quarter(v-for='file in currentFiles' :key='file')
+      .column.is-one-quarter(v-for='file in currentFiles' :key='file.name')
         .card
           .card-image
             img(:src="'file:///' + file.realPath")

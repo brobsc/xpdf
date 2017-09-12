@@ -37,7 +37,8 @@ export default new Vuex.Store({
       state.files.splice(to, 0, state.files.splice(from, 1)[0]);
     },
     changeQuality(state, val) {
-      state.quality = val;
+      // Ensure a number is returned, and not a string
+      state.quality = Number(val);
     },
     changeContrast(state, val) {
       state.applyContrast = val;

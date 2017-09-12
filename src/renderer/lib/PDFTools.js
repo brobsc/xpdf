@@ -1,3 +1,4 @@
+import sharp from 'sharp';
 import execa from 'execa';
 import fs from 'fs';
 
@@ -12,9 +13,9 @@ export default {
     return opt;
   },
 
-  optimize(file, userOptions = {}) {
+  async optimize(file, userOptions = {}) {
     let options = {
-      quality: 99,
+      quality: 100,
     };
 
     options = this.optionsConstructor(options, userOptions);
@@ -22,17 +23,25 @@ export default {
     // TODO: Make temp path
     const newPath = `/Users/bruno/Desktop/temps/${file.name}`;
 
-    execa.shellSync(`gm convert -size 595x842 '${file.realPath}'\
-          -background white\
-          -compress JPEG\
-          -gravity center\
-          -rotate '90>'\
-          -geometry '595x842>'\
-          -extent 595x842\
-          -density 150x150\
-          -resample 150x150\
-          -quality ${options.quality}\
-          '${newPath}'`);
+    await sharp(file.realPath)
+      .resize(595, 842)
+      .background('white')
+      .max()
+      .embed()
+      .jpeg({ quality: options.quality })
+      .toFile(newPath);
+
+    // execa.shellSync(`gm convert -size 595x842 '${file.realPath}'\
+    //       -background white\
+    //       -compress JPEG\
+    //       -gravity center\
+    //       -rotate '90>'\
+    //       -geometry '595x842>'\
+    //       -extent 595x842\
+    //       -density 150x150\
+    //       -resample 150x150\
+    //       -quality ${options.quality}\
+    //       '${newPath}'`);
 
     return newPath;
   },

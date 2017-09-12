@@ -55,13 +55,17 @@
         });
       },
 
-      generatePreview() {
+      // TODO: It's a mess of awaits and promises
+      async generatePreview() {
         const files = this.$store.state.files;
-        const images = [];
+        let images = [];
 
-        files.forEach(file => images.push(tools.optimize(file)));
+        images = await Promise.all(files.map(async (file) => {
+          const f = await tools.optimize(file);
+          return f;
+        }));
 
-        tools.convert(images, { quality: this.quality, contrast: this.contrast });
+        tools.convert(await images, { quality: this.quality, contrast: this.contrast });
       },
     },
   };

@@ -61,11 +61,11 @@
         let images = [];
 
         images = await Promise.all(files.map(async (file) => {
-          const f = await tools.optimize(file);
+          const f = await tools.optimize(file, { quality: this.quality });
           return f;
         }));
 
-        tools.convert(await images, { quality: this.quality, contrast: this.contrast });
+        tools.convert(await images, { quality: 100, contrast: this.contrast });
       },
     },
   };

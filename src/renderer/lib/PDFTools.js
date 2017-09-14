@@ -24,7 +24,7 @@ export default {
     const newPath = `/Users/bruno/Desktop/temps/${file.name}`;
 
     await sharp(file.realPath)
-      .resize(595, 842)
+      // .resize(595, 842)
       .background('white')
       .max()
       .embed()
@@ -70,14 +70,25 @@ export default {
     console.log('Current options = ' + JSON.stringify(options)); // eslint-disable-line
     console.log(contrastString); // eslint-disable-line
 
-    const command = `gm convert\
+    const command1 = `gm convert\
           ${allPaths}\
           ${contrastString}\
           -compress JPEG\
-          -quality ${options.quality}\
+          -gravity center\
+          -background white\
+          -geometry '595x842>'\
+          -extent 595x842\
+          -density 96x96\
+          -resample 96x96\
           /Users/bruno/Desktop/temp.pdf`;
 
-    execa.shellSync(command);
+    const command2 = `img2pdf ${allPaths} --without-pdfrw -f shrink -S A4 -o /Users/bruno/Desktop/temp2.pdf`;
+
+    execa.shellSync(command1);
+    execa.shellSync(command2);
+
+    console.log(fs.statSync('/Users/bruno/Desktop/temp.pdf').size * 0.001); // eslint-disable-line
+    console.log(fs.statSync('/Users/bruno/Desktop/temp2.pdf').size * 0.001); // eslint-disable-line
   },
 
   getSize(file) {

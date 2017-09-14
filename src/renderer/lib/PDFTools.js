@@ -23,13 +23,26 @@ export default {
     // TODO: Make temp path
     const newPath = `/Users/bruno/Desktop/temps/${file.name}`;
 
-    await sharp(file.realPath)
+    const image = sharp(file.realPath);
+
+    image
       // .resize(595, 842)
-      .background('white')
-      .max()
-      .embed()
-      .jpeg({ quality: options.quality })
-      .toFile(newPath);
+      .metadata()
+      .then((metadata) => {
+        console.log(`${metadata.width}x${metadata.height}`); // eslint-disable-line
+        if (metadata.width > metadata.height) {
+          return image.rotate(-90).toBuffer();
+        }
+        return image.toBuffer();
+      })
+      .then(() => {
+        image
+          .background('white')
+          .max()
+          .embed()
+          .jpeg({ quality: options.quality })
+          .toFile(newPath);
+      });
 
     // execa.shellSync(`gm convert -size 595x842 '${file.realPath}'\
     //       -background white\

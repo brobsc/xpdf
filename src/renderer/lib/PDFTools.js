@@ -24,25 +24,18 @@ export default {
     const newPath = `/Users/bruno/Desktop/temps/${file.name}`;
 
     const image = sharp(file.realPath);
+    const metadata = await image.metadata();
 
-    image
-      // .resize(595, 842)
-      .metadata()
-      .then((metadata) => {
-        console.log(`${metadata.width}x${metadata.height}`); // eslint-disable-line
-        if (metadata.width > metadata.height) {
-          return image.rotate(-90).toBuffer();
-        }
-        return image.toBuffer();
-      })
-      .then(() => {
-        image
-          .background('white')
-          .max()
-          .embed()
-          .jpeg({ quality: options.quality })
-          .toFile(newPath);
-      });
+    if (metadata.width > metadata.height) {
+      await image.rotate(-90);
+    }
+
+    await image
+      .background('white')
+      .max()
+      .embed()
+      .jpeg({ quality: options.quality })
+      .toFile(newPath);
 
     // execa.shellSync(`gm convert -size 595x842 '${file.realPath}'\
     //       -background white\

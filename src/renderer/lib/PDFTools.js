@@ -52,7 +52,7 @@ export default {
     return newPath;
   },
 
-  convert(images, userOptions = {}) {
+  convertToPDF(images, userOptions = {}) {
     let options = {
       quality: 40,
       contrast: 'normal',

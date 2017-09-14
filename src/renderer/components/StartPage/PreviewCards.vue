@@ -10,6 +10,7 @@
         .card
           .card-image
             img(:src="'file:///' + file.realPath")
+            .dim-overlay
           .card-content
             .title.is-4.is-spaced.is-marginless
               | {{ file.name }}
@@ -21,7 +22,15 @@
 
 <script>
   export default {
-    name: 'preview-cards',
+    data() {
+      return {
+        name: 'preview-cards',
+        current: 1,
+        size: 'is-small',
+        perPage: 8,
+        order: 'is-centered',
+      };
+    },
 
     watch: {
       current() {
@@ -62,15 +71,6 @@
       },
     },
 
-    data() {
-      return {
-        current: 1,
-        size: 'is-small',
-        perPage: 8,
-        order: 'is-centered',
-      };
-    },
-
     methods: {
       removeFile(file) {
         this.$store.commit('removeFile', file);
@@ -107,9 +107,31 @@
     height: 150px;
   };
 
+  /* dim-overlay found on: https://codepen.io/philcheng/pen/YWyYwG */
+  .card-image .dim-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    transition: background 0.5s ease;
+  }
+
+  .card-image:hover .dim-overlay {
+    display: block;
+    background: rgba(1000, 1000, 1000, .6);
+  }
+
   img {
     max-height: 100%;
     width: 100%;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
   };
 
   .card-footer-item {

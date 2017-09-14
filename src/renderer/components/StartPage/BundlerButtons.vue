@@ -65,7 +65,7 @@
           return f;
         }));
 
-        tools.convert(await images, { quality: 100, contrast: this.contrast });
+        tools.convertToPDF(await images, { quality: 100, contrast: this.contrast });
       },
     },
   };

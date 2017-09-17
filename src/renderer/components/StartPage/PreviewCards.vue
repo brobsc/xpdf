@@ -11,6 +11,12 @@
           .card-image
             img(:src="'file:///' + file.realPath")
             .dim-overlay
+            a.button.is-small.is-primary(v-if='isPDF(file)' @click='unbundlePDF(file)')
+              span.icon.is-small
+                i.fa.fa-unlink
+            a.button.is-small.is-primary(v-if='!isPDF(file)' @click='rotateImage(file)')
+              span.icon.is-small
+                i.fa.fa-undo
           .card-content
             .title.is-4.is-spaced.is-marginless
               | {{ file.name }}
@@ -21,6 +27,8 @@
 </template>
 
 <script>
+  import tools from '../../lib/PDFTools.js';
+
   export default {
     data() {
       return {
@@ -72,6 +80,13 @@
     },
 
     methods: {
+      isPDF(file) {
+        const chunk = this.$readChunk.sync(file.realPath, 0, 4100);
+        const ext = this.$fileType(chunk).ext;
+
+        return ext === 'pdf';
+      },
+
       removeFile(file) {
         this.$store.commit('removeFile', file);
       },
@@ -83,6 +98,25 @@
         const step = this.perPage;
 
         this.$store.commit('changeIndex', [previous, newValue, current, step]);
+      },
+
+      unbundlePDF(file) {
+        const list = tools.extractPDF(file);
+
+        list.forEach((image) => {
+          this.$store.commit('addFile', image);
+        });
+
+        this.$store.commit('removeFile', file);
+
+        console.log(list); // eslint-disable-line
+      },
+
+      async rotateImage(file) {
+        const newFile = await tools.rotate(file);
+
+        this.$store.commit('removeFile', file);
+        this.$store.commit('addFile', newFile);
       },
     },
 
@@ -118,9 +152,23 @@
     transition: background 0.5s ease;
   }
 
+  .card-image a.button {
+    opacity: 0;
+    transition: opacity .5s ease;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 35%;
+  }
+
   .card-image:hover .dim-overlay {
     display: block;
     background: rgba(1000, 1000, 1000, .6);
+  }
+
+  .card-image:hover a.button {
+    opacity: 1;
   }
 
   img {

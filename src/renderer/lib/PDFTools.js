@@ -13,6 +13,25 @@ export default {
     return opt;
   },
 
+  async rotate(file) {
+    const newName = `${this.getFileName(file.realPath)}-rotated.jpg`;
+    const newPath = `/Users/bruno/Desktop/temps/ROTATED/${newName}`;
+
+    await sharp(file.realPath)
+      .rotate(-90)
+      .jpeg({ quality: 100 })
+      .toFile(newPath);
+
+    const contents = fs.readFileSync(newPath, { encoding: 'utf-8' });
+    const fileName = this.getFileNameAndExtension(newPath);
+    const f = new File([contents], fileName, {
+      type: 'image/jpg',
+    });
+    f.realPath = newPath;
+
+    return f;
+  },
+
   async optimize(file, userOptions = {}) {
     let options = {
       quality: 100,

@@ -43,11 +43,11 @@ export default {
     const newPath = `/Users/bruno/Desktop/temps/${file.name}`;
 
     const image = sharp(file.realPath);
-    const metadata = await image.metadata();
+    // const metadata = await image.metadata();
 
-    if (metadata.width > metadata.height) {
-      await image.rotate(-90);
-    }
+    // if (metadata.width > metadata.height) {
+    //   await image.rotate(-90);
+    // }
 
     await image
       .background('white')

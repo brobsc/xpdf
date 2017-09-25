@@ -1,8 +1,20 @@
 import sharp from 'sharp';
 import execa from 'execa';
 import fs from 'fs';
+import FolderTools from './FolderTools.js';
 
 export default {
+  async fileGenerator(path) {
+    const contents = fs.readFileSync(path, { encoding: 'utf-8' });
+    const fileName = this.getFileNameAndExtension(path);
+    const f = new File([contents], fileName, {
+      type: 'image/jpg',
+    });
+    f.realPath = path;
+
+    return f;
+  },
+
   optionsConstructor(opt, user) {
     if (user === {}) return opt;
 
@@ -15,19 +27,15 @@ export default {
 
   async rotate(file) {
     const newName = `${this.getFileName(file.realPath)}-rotated.jpg`;
-    const newPath = `/Users/bruno/Desktop/temps/ROTATED/${newName}`;
+    const newPathName = FolderTools.rotatedDir();
+    const newPath = `${newPathName}${newName}`;
 
     await sharp(file.realPath)
       .rotate(-90)
       .jpeg({ quality: 100 })
       .toFile(newPath);
 
-    const contents = fs.readFileSync(newPath, { encoding: 'utf-8' });
-    const fileName = this.getFileNameAndExtension(newPath);
-    const f = new File([contents], fileName, {
-      type: 'image/jpg',
-    });
-    f.realPath = newPath;
+    const f = await this.fileGenerator(newPath);
 
     return f;
   },
@@ -145,13 +153,10 @@ export default {
     return dir;
   },
 
-  extractPDF(file) {
+  async extractPDF(file) {
     console.log(file); // eslint-disable-line
     const name = this.getFileName(file.path);
-    const newPath = `/Users/bruno/Desktop/temps/extracted/${name}`;
-    if (!fs.existsSync(newPath)) {
-      fs.mkdirSync(newPath);
-    }
+    const newPath = await FolderTools.createChildFolder(name, FolderTools.extractedDir());
     const pdfbox = __dirname + '/pdfbox-app-2.0.6.jar'; // eslint-disable-line
     let resultImages = [];
 
@@ -170,13 +175,8 @@ export default {
 
     const resultFiles = [];
 
-    resultImages.forEach((img) => {
-      const contents = fs.readFileSync(img, { encoding: 'utf-8' });
-      const fileName = this.getFileNameAndExtension(img);
-      const f = new File([contents], fileName, {
-        type: 'image/jpg',
-      });
-      f.realPath = img;
+    resultImages.forEach(async (img) => {
+      const f = await this.fileGenerator(img);
       resultFiles.push(f);
     });
 

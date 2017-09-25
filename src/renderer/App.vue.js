@@ -1,3 +1,5 @@
+import FolderTools from './lib/FolderTools.js';
+
 export default {
   name: 'xpdf',
   methods: {
@@ -30,5 +32,10 @@ export default {
       // Returns on the first that finds the condition true
       return !files.some(stored => file.realPath === stored.realPath);
     },
+  },
+
+  created() {
+    FolderTools.initializeMasterFolder();
+    console.log('created'); // eslint-disable-line
   },
 };

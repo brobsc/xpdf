@@ -100,8 +100,8 @@
         this.$store.commit('changeIndex', [previous, newValue, current, step]);
       },
 
-      unbundlePDF(file) {
-        const list = tools.extractPDF(file);
+      async unbundlePDF(file) {
+        const list = await tools.extractPDF(file);
 
         list.forEach((image) => {
           this.$store.commit('addFile', image);

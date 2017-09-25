@@ -11,10 +11,10 @@
           .card-image
             img(:src="'file:///' + file.realPath")
             .dim-overlay
-            a.button.is-small.is-primary(v-if='isPDF(file)' @click='unbundlePDF(file)')
+            a.button.is-small.is-primary(:class="{'is-loading': unbundling}" v-if='isPDF(file)' @click='unbundlePDF(file)')
               span.icon.is-small
                 i.fa.fa-unlink
-            a.button.is-small.is-primary(v-if='!isPDF(file)' @click='rotateImage(file)')
+            a.button.is-small.is-primary(:class="{'is-loading': rotating}" v-if='!isPDF(file)' @click='rotateImage(file)')
               span.icon.is-small
                 i.fa.fa-undo
           .card-content
@@ -37,6 +37,8 @@
         size: 'is-small',
         perPage: 8,
         order: 'is-centered',
+        unbundling: false,
+        rotating: false,
       };
     },
 
@@ -101,6 +103,7 @@
       },
 
       async unbundlePDF(file) {
+        this.unbundling = true;
         const list = await tools.extractPDF(file);
 
         list.forEach((image) => {
@@ -110,13 +113,16 @@
         this.$store.commit('removeFile', file);
 
         console.log(list); // eslint-disable-line
+        this.unbundling = false;
       },
 
       async rotateImage(file) {
+        this.rotating = true;
         const newFile = await tools.rotate(file);
 
         this.$store.commit('removeFile', file);
         this.$store.commit('addFile', newFile);
+        this.rotating = false;
       },
     },
 

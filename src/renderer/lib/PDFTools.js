@@ -79,20 +79,13 @@ export default {
     return newPath;
   },
 
-  convertToPDF(images, userOptions = {}) {
+  async convertToPDF(images, userOptions = {}) {
     let options = {
       quality: 40,
       contrast: 'normal',
     };
 
     options = this.optionsConstructor(options, userOptions);
-    // 40, 1
-    // Contrast = 0 --
-    // Contrast = 1 NONE
-    // Contrast = 2 ++
-    // TODO: Use temp path
-    // Converts a /path/to/image to "'/path/to/image' "
-    // and joins them to get rid of ',' imposed by JS arrays
     let contrastString = '';
     const allPaths = images.map(image => `'${image}' `).join('');
 
@@ -160,7 +153,7 @@ export default {
     const pdfbox = __dirname + '/pdfbox-app-2.0.6.jar'; // eslint-disable-line
     let resultImages = [];
 
-    execa.shellSync(`java -jar ${pdfbox} PDFToImage -outputPrefix '${newPath}/${name}-' '${file.realPath}'`);
+    await execa.shell(`java -jar ${pdfbox} PDFToImage -outputPrefix '${newPath}/${name}-' '${file.realPath}'`);
 
     fs.readdirSync(newPath).forEach((newFile) => {
       // TODO: Check if file is a valid image

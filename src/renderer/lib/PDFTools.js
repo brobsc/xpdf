@@ -48,7 +48,7 @@ export default {
     options = this.optionsConstructor(options, userOptions);
 
     // TODO: Make temp path
-    const newPath = `/Users/bruno/Desktop/temps/${file.name}`;
+    const newPath = `${FolderTools.dirString()}${file.name}`;
 
     const image = sharp(file.realPath);
     // const metadata = await image.metadata();
@@ -76,7 +76,8 @@ export default {
     //       -quality ${options.quality}\
     //       '${newPath}'`);
 
-    return newPath;
+    const f = this.fileGenerator(newPath);
+    return f;
   },
 
   async convertToPDF(images, userOptions = {}) {
@@ -87,14 +88,10 @@ export default {
 
     options = this.optionsConstructor(options, userOptions);
     let contrastString = '';
-    const allPaths = images.map(image => `'${image}' `).join('');
+    const allPaths = images.map(image => `'${image.realPath}' `).join('');
 
     if (options.contrast === 'decrease') contrastString = '-contrast -contrast';
     else if (options.contrast === 'increase') contrastString = '+contrast +contrast';
-
-    console.log('Default options = ' + JSON.stringify(options)); // eslint-disable-line
-    console.log('Current options = ' + JSON.stringify(options)); // eslint-disable-line
-    console.log(contrastString); // eslint-disable-line
 
     const command1 = `gm convert\
           ${allPaths}\
@@ -148,7 +145,7 @@ export default {
 
   async extractPDF(file) {
     console.log(file); // eslint-disable-line
-    const name = this.getFileName(file.path);
+    const name = this.getFileName(file.realPath);
     const newPath = await FolderTools.createChildFolder(name, FolderTools.extractedDir());
     const pdfbox = __dirname + '/pdfbox-app-2.0.6.jar'; // eslint-disable-line
     let resultImages = [];

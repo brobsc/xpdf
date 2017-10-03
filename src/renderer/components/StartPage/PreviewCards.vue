@@ -24,6 +24,7 @@
             .subtitle.is-6 {{ getExtension(file) }}
             .card-footer
               a.card-footer-item.is-paddingless(@click='removeFile(file)') Remove
+    b-loading(:active.sync='unbundling' :canCancel='false')
 </template>
 
 <script>

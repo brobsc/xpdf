@@ -27,9 +27,11 @@ export default {
     try {
       fs.mkdirSync(this.dirString());
     } catch (e) {
-      if (e.code !== 'EEXIST') console.log(e); // eslint-disable-line
+      if (e.code !== 'EEXIST') {
+        console.log(e); // eslint-disable-line
+        throw e;
+      }
     }
-
     await this.createFolder('ROTATED');
     await this.createFolder('EXTRACTED');
     await this.createFolder('THUMBS');
@@ -41,7 +43,10 @@ export default {
     try {
       fs.mkdirSync(folderName);
     } catch (e) {
-      if (e.code !== 'EEXIST') console.log(e); // eslint-disable-line
+      if (e.code !== 'EEXIST') {
+        console.log(e); // eslint-disable-line
+        throw e;
+      }
     }
 
     return folderName;
@@ -53,7 +58,10 @@ export default {
     try {
       fs.mkdirSync(folderName);
     } catch (e) {
-      if (e.code !== 'EEXIST') console.log(e); // eslint-disable-line
+      if (e.code !== 'EEXIST') {
+        console.log(e); // eslint-disable-line
+        throw e;
+      }
     }
 
     return folderName;

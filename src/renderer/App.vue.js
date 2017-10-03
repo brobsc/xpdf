@@ -17,10 +17,26 @@ export default {
 
     isAcceptable(file) {
       const chunk = this.$readChunk.sync(file.path, 0, 4100);
-      const ext = this.$fileType(chunk).ext;
       const acceptable = this.$store.state.acceptableExts;
 
-      return acceptable.includes(ext);
+      let result;
+
+      try {
+        const ext = this.$fileType(chunk).ext;
+        result = acceptable.includes(ext);
+      } catch (e) {
+        if (e.name === 'TypeError') {
+          // this.$toast.open({
+          //   duration: 3000,
+          //   type: 'is-danger',
+          //   message: `Unnaceptable extension on file '${file.name}'`,
+          //   position: 'is-bottom',
+          // });
+          return false;
+        }
+      }
+
+      return result;
     },
 
     isMissing(file) {
@@ -31,7 +47,16 @@ export default {
     },
   },
 
-  created() {
-    FolderTools.initializeMasterFolder();
+  async created() {
+    try {
+      await FolderTools.initializeMasterFolder();
+    } catch (e) {
+      this.$toast.open({
+        duration: 5000,
+        message: e.code,
+        position: 'is-bottom',
+        type: 'is-danger',
+      });
+    }
   },
 };

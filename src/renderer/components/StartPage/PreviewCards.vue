@@ -49,6 +49,8 @@
           this.current = 1;
         }
       },
+
+      // TODO: Fix pagination thumbs
       async files(obs) {
         if (this.isEmpty) return;
         const refs = await this.$refs;
@@ -56,8 +58,12 @@
         // Create new array comparing to old one
         const newFiles = obs.filter(i => !this.oldFiles.includes(i));
         newFiles.forEach(async (file) => {
-          const element = await refs[file.name][0];
-          if (element === undefined) return;
+          let element;
+          try {
+            element = await refs[file.name][0];
+          } catch (e) {
+            return;
+          }
 
           const thumb = await tools.createPDFThumbnail(file);
 

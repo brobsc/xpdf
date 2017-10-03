@@ -8,15 +8,15 @@ export default {
   },
 
   rotatedDir() {
-    return `${this.dirString()}${sep}ROTATED${sep}`;
+    return `${this.dirString()}ROTATED${sep}`;
   },
 
   extractedDir() {
-    return `${this.dirString()}${sep}EXTRACTED${sep}`;
+    return `${this.dirString()}EXTRACTED${sep}`;
   },
 
   thumbsDir() {
-    return `${this.dirString()}${sep}THUMBS${sep}`;
+    return `${this.dirString()}THUMBS${sep}`;
   },
 
   userData() {
@@ -27,14 +27,12 @@ export default {
     try {
       fs.mkdirSync(this.dirString());
     } catch (e) {
-      console.log(e); // eslint-disable-line
+      if (e.code !== 'EEXIST') console.log(e); // eslint-disable-line
     }
 
     await this.createFolder('ROTATED');
     await this.createFolder('EXTRACTED');
     await this.createFolder('THUMBS');
-
-    console.log(this.dirString()); // eslint-disable-line
   },
 
   async createFolder(name) {
@@ -43,7 +41,7 @@ export default {
     try {
       fs.mkdirSync(folderName);
     } catch (e) {
-      console.log(e); // eslint-disable-line
+      if (e.code !== 'EEXIST') console.log(e); // eslint-disable-line
     }
 
     return folderName;
@@ -55,7 +53,7 @@ export default {
     try {
       fs.mkdirSync(folderName);
     } catch (e) {
-      console.log(e); // eslint-disable-line
+      if (e.code !== 'EEXIST') console.log(e); // eslint-disable-line
     }
 
     return folderName;

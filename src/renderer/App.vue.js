@@ -27,12 +27,11 @@ export default {
       const files = this.$store.state.files;
 
       // Returns on the first that finds the condition true
-      return !files.some(stored => file.realPath === stored.realPath);
+      return !files.some(stored => file.path === stored.realPath);
     },
   },
 
   created() {
     FolderTools.initializeMasterFolder();
-    console.log('created'); // eslint-disable-line
   },
 };

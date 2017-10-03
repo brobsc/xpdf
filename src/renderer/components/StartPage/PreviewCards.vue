@@ -9,7 +9,7 @@
       .column.is-one-quarter(v-for='file in currentFiles' :key='file.name')
         .card
           .card-image
-            img(:src='getImageThumb(file)' :ref='file.name')
+            img(src='http://via.placeholder.com/350x150' :ref='file.name')
             .dim-overlay
             a.button.is-small.is-primary(:class="{'is-loading': unbundling}" v-if='isPDF(file)' @click='unbundlePDF(file)')
               span.icon.is-small
@@ -21,7 +21,7 @@
             .title.is-4.is-spaced.is-marginless
               | {{ file.name }}
             .subtitle.is-6.is-pulled-right {{ file.size | prettyBytes }}
-            .subtitle.is-6 {{ file.type }}
+            .subtitle.is-6 {{ getExtension(file) }}
             .card-footer
               a.card-footer-item.is-paddingless(@click='removeFile(file)') Remove
 </template>
@@ -39,6 +39,7 @@
         order: 'is-centered',
         unbundling: false,
         rotating: false,
+        oldFiles: [],
       };
     },
 
@@ -47,6 +48,25 @@
         if (this.current <= 0) {
           this.current = 1;
         }
+      },
+      async files(obs) {
+        if (this.isEmpty) return;
+        const numberOfNewFiles = obs.length - this.oldFiles.length;
+        const newFiles = obs.slice(-numberOfNewFiles);
+        newFiles.forEach(async (file) => {
+          const refs = await this.$refs;
+          const element = await refs[file.name][0];
+          if (element === undefined) return;
+
+          if (this.isPDF(file)) {
+            const thumb = await tools.createPDFThumbnail(file);
+
+            element.src = `file:///${thumb.realPath}`;
+          } else {
+            element.src = `file:///${file.realPath}`;
+          }
+        });
+        this.oldFiles = obs.slice();
       },
     },
 
@@ -82,33 +102,16 @@
     },
 
     methods: {
-      async deferPDFThumb(file) {
-        console.log('called'); // eslint-disable-line
-        let element;
-        const refs = await this.$refs;
-        Object.keys(refs).forEach(async (key) => {
-          if (refs[key] === refs[file.name]) {
-            element = refs[key];
-            const src = await tools.createPDFThumbnail(file);
-            element[0].src = `file:///${src.realPath}`;
-          }
-        });
-      },
-
-      getImageThumb(file) { // eslint-disable-line
-        if (!this.isPDF(file)) {
-          return `file:///${file.realPath}`;
-        }
-
-        this.deferPDFThumb(file);
-        return `file:///${file.realPath}`;
-      },
-
-      isPDF(file) {
+      getExtension(file) {
         const chunk = this.$readChunk.sync(file.realPath, 0, 4100);
         const ext = this.$fileType(chunk).ext;
 
-        return ext === 'pdf';
+        return ext.toUpperCase();
+      },
+
+      isPDF(file) {
+        if (this.getExtension(file) === 'PDF') return true;
+        return false;
       },
 
       removeFile(file) {

@@ -10,9 +10,6 @@ export default {
         const f = filesToAdd.item(i);
         if (this.isMissing(f) && this.isAcceptable(f)) {
           f.realPath = f.path; // Add realPath property for easy mutation later
-          console.log(f); // eslint-disable-line
-          console.log(typeof(f.path)); // eslint-disable-line
-          console.log(typeof(f.realPath)); // eslint-disable-line
           this.$store.commit('addFile', f);
         }
       }

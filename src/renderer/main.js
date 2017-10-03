@@ -51,3 +51,11 @@ Vue.filter('prettyBytes', (num) => {
 // Custom Libraries
 Object.defineProperty(Vue.prototype, '$fileType', { value: fileType });
 Object.defineProperty(Vue.prototype, '$readChunk', { value: readChunk });
+
+// Extension method helper
+Vue.prototype.$getFileExtension = (file) => {
+  const chunk = readChunk.sync(file.realPath, 0, 4100);
+  const ext = fileType(chunk).ext;
+
+  return ext;
+};

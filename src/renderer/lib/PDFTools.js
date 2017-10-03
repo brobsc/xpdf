@@ -1,10 +1,14 @@
 import sharp from 'sharp';
 import execa from 'execa';
 import fs from 'fs';
+import fileType from 'file-type';
+import readChunk from 'read-chunk';
 import FolderTools from './FolderTools.js';
 
 export default {
   async createPDFThumbnail(file) {
+    if (this.getFileExtension(file.realPath) !== 'pdf') return file;
+
     const newName = `${this.getFileName(file.realPath)}-thumb.jpg`;
     const newPathName = FolderTools.thumbsDir();
     const newPath = `${newPathName}${newName}`;
@@ -153,6 +157,13 @@ export default {
     const name = path.match(regex)[1];
 
     return name;
+  },
+
+  getFileExtension(path) {
+    const chunk = readChunk.sync(path, 0, 4100);
+    const ext = fileType(chunk).ext;
+
+    return ext;
   },
 
   getDirectory(path) {

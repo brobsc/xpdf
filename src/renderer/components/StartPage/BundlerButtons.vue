@@ -7,7 +7,6 @@
         button.is-small.button(@click='clearFiles') Clear
       p.control
         button.is-small.button(@click='unbundle') Unbundle
-    canvas#pdfPreview
 </template>
 
 <script>
@@ -40,8 +39,7 @@
         const files = this.$store.state.files;
 
         files.forEach((file) => {
-          const chunk = this.$readChunk.sync(file.realPath, 0, 4100);
-          const ext = this.$fileType(chunk).ext;
+          const ext = tools.getFileExtension(file.realPath);
 
           if (ext === 'pdf') {
             const list = tools.extractPDF(file);

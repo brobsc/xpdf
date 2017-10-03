@@ -51,21 +51,19 @@
       },
       async files(obs) {
         if (this.isEmpty) return;
-        const numberOfNewFiles = obs.length - this.oldFiles.length;
-        const newFiles = obs.slice(-numberOfNewFiles);
+        const refs = await this.$refs;
+
+        // Create new array comparing to old one
+        const newFiles = obs.filter(i => !this.oldFiles.includes(i));
         newFiles.forEach(async (file) => {
-          const refs = await this.$refs;
           const element = await refs[file.name][0];
           if (element === undefined) return;
 
-          if (this.isPDF(file)) {
-            const thumb = await tools.createPDFThumbnail(file);
+          const thumb = await tools.createPDFThumbnail(file);
 
-            element.src = `file:///${thumb.realPath}`;
-          } else {
-            element.src = `file:///${file.realPath}`;
-          }
+          element.src = `file:///${thumb.realPath}`;
         });
+
         this.oldFiles = obs.slice();
       },
     },
@@ -103,15 +101,13 @@
 
     methods: {
       getExtension(file) {
-        const chunk = this.$readChunk.sync(file.realPath, 0, 4100);
-        const ext = this.$fileType(chunk).ext;
+        const ext = tools.getFileExtension(file.realPath);
 
         return ext.toUpperCase();
       },
 
       isPDF(file) {
-        if (this.getExtension(file) === 'PDF') return true;
-        return false;
+        return tools.getFileExtension(file.realPath) === 'pdf';
       },
 
       removeFile(file) {

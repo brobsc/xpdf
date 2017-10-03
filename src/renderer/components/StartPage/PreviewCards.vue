@@ -9,7 +9,7 @@
       .column.is-one-quarter(v-for='file in currentFiles' :key='file.name')
         .card
           .card-image
-            img(:src="'file:///' + file.realPath")
+            img(:src='getImageThumb(file)' :ref='file.name')
             .dim-overlay
             a.button.is-small.is-primary(:class="{'is-loading': unbundling}" v-if='isPDF(file)' @click='unbundlePDF(file)')
               span.icon.is-small
@@ -82,6 +82,28 @@
     },
 
     methods: {
+      async deferPDFThumb(file) {
+        console.log('called'); // eslint-disable-line
+        let element;
+        const refs = await this.$refs;
+        Object.keys(refs).forEach(async (key) => {
+          if (refs[key] === refs[file.name]) {
+            element = refs[key];
+            const src = await tools.createPDFThumbnail(file);
+            element[0].src = `file:///${src.realPath}`;
+          }
+        });
+      },
+
+      getImageThumb(file) { // eslint-disable-line
+        if (!this.isPDF(file)) {
+          return `file:///${file.realPath}`;
+        }
+
+        this.deferPDFThumb(file);
+        return `file:///${file.realPath}`;
+      },
+
       isPDF(file) {
         const chunk = this.$readChunk.sync(file.realPath, 0, 4100);
         const ext = this.$fileType(chunk).ext;

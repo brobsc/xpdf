@@ -4,6 +4,25 @@ import fs from 'fs';
 import FolderTools from './FolderTools.js';
 
 export default {
+  async createPDFThumbnail(file) {
+    const newName = `${this.getFileName(file.realPath)}-thumb.jpg`;
+    const newPathName = FolderTools.thumbsDir();
+    const newPath = `${newPathName}${newName}`;
+
+    const command1 = `gm convert\
+          '${file.realPath}'[0]\
+          -size 'x150'\
+          -compress JPEG\
+          -geometry 'x150'\
+          '${newPath}'`;
+
+    execa.shellSync(command1);
+
+    const f = await this.fileGenerator(newPath);
+
+    return f;
+  },
+
   async fileGenerator(path) {
     const contents = fs.readFileSync(path, { encoding: 'utf-8' });
     const fileName = this.getFileNameAndExtension(path);

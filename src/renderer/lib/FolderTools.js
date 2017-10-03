@@ -15,6 +15,10 @@ export default {
     return `${this.dirString()}${sep}EXTRACTED${sep}`;
   },
 
+  thumbsDir() {
+    return `${this.dirString()}${sep}THUMBS${sep}`;
+  },
+
   userData() {
     return app.getPath('userData');
   },
@@ -28,6 +32,7 @@ export default {
 
     await this.createFolder('ROTATED');
     await this.createFolder('EXTRACTED');
+    await this.createFolder('THUMBS');
 
     console.log(this.dirString()); // eslint-disable-line
   },

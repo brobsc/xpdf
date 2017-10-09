@@ -1,12 +1,17 @@
 <template lang='pug'>
-  div
-    .field.is-grouped
-      p.control
-        button.is-outlined.is-small.is-primary.button(:class="{ 'is-loading': isGenerating }" @click='generatePreview') Preview
-      p.control
-        button.is-small.button(@click='clearFiles') Clear
-      p.control
-        button.is-small.button(@click='unbundle') Unbundle
+  .x-container
+    .gutter
+    .gutter
+    .gutter
+    .x-button.control
+      button.is-outlined.is-small.is-primary.button(:class="{ 'is-loading': isGenerating }" @click='generatePreview') Preview
+    .x-button.control
+      button.is-small.button(@click='clearFiles') Clear
+    .x-button.control
+      button.is-small.button(@click='unbundle') Unbundle
+    .gutter
+    .gutter
+    .gutter
 </template>
 
 <script>
@@ -77,6 +82,13 @@
 </script>
 
 <style lang='scss' scoped>
+  .x-container {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: 1fr;
+    padding-top: 10px;
+    justify-items: center;
+  }
   /* Necessary for corrent loading background-color */
   button.is-outlined.is-loading:focus {
     background-color: transparent !important;

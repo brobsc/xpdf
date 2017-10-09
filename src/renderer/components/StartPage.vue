@@ -1,17 +1,14 @@
 <template lang='pug'>
-  .container
-    .columns.is-mobile
-      .column
-        h1.title sPDF
-        p Files: {{ files.length }}
-      .column
-        settings-panel
-    .columns.is-mobile
-      .column
-        preview-cards
-    .columns.is-mobile
-      .column
-        bundler-buttons
+  .x-container
+    .display-panel
+      h1.title sPDF
+      p Files: {{ files.length }}
+    .settings-panel
+      settings-panel
+    .preview-cards
+      preview-cards
+    .bundler-buttons
+      bundler-buttons
 </template>
 
 <script>
@@ -35,5 +32,32 @@
   };
 </script>
 
-<style>
+<style lang='scss' scoped>
+  .x-container {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 30% 70%;
+    grid-template-rows: 2fr 435px 1fr;
+    grid-template-areas:
+      'display-panel settings-panel'
+      'preview-cards preview-cards'
+      'bundler-buttons bundler-buttons';
+    grid-gap: 12px;
+  };
+
+  .display-panel {
+    grid-area: display-panel;
+  };
+
+  .settings-panel {
+    grid-area: settings-panel;
+  };
+
+  .preview-cards {
+    grid-area: preview-cards;
+  };
+
+  .bundler-buttons {
+    grid-area: bundler-buttons;
+  };
 </style>

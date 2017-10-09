@@ -1,29 +1,30 @@
 <template lang='pug'>
-  div
-    .columns
-      .column
+  div(:class='{ "drop-area": isEmpty}')
+    .x-container
+      .x-pagination
         b-pagination(:total='files.length' :current.sync='current' :per-page='perPage'
-        :size='size' :order='order' :simple='true' :class='{ "is-invisible": !needsPagination }')
-    .columns.is-multiline.is-mobile.dragula-container.fixed-height(v-dragula='currentFiles'
-                                      drake='currentFiles' :class='{ "drop-area": isEmpty }')
-      .column.is-one-quarter(v-for='file in currentFiles' :key='file.name')
-        .card
+          :size='size' :order='order' :simple='true' :class='{ "is-invisible": !needsPagination }')
+      .x-cards.dragula-container(v-dragula='currentFiles'
+                                        drake='currentFiles')
+        .x-card.card(v-for='file in currentFiles' :key='file.name')
           .card-image
-            img(src='http://via.placeholder.com/350x150' :ref='file.name')
+            img(src='http://via.placeholder.com/106x150' :ref='file.name')
             .dim-overlay
-            a.button.is-small.is-primary(:class="{'is-loading': unbundling}" v-if='isPDF(file)' @click='unbundlePDF(file)')
-              span.icon.is-small
-                i.fa.fa-unlink
-            a.button.is-small.is-primary(:class="{'is-loading': rotating}" v-if='!isPDF(file)' @click='rotateImage(file)')
-              span.icon.is-small
-                i.fa.fa-undo
-          .card-content
-            .title.is-4.is-spaced.is-marginless
-              | {{ file.name }}
-            .subtitle.is-6.is-pulled-right {{ file.size | prettyBytes }}
-            .subtitle.is-6 {{ getExtension(file) }}
-            .card-footer
-              a.card-footer-item.is-paddingless(@click='removeFile(file)') Remove
+              a.button.is-small.is-primary(:class="{'is-loading': unbundling}" v-if='isPDF(file)' @click='unbundlePDF(file)')
+                span.icon.is-small
+                  i.fa.fa-unlink
+              a.button.is-small.is-primary(:class="{'is-loading': rotating}" v-if='!isPDF(file)' @click='rotateImage(file)')
+                span.icon.is-small
+                  i.fa.fa-undo
+          .x-card-content
+            .x-card-title
+              p.title {{ file.name }}
+            .x-card-ext
+              p {{ getExtension(file) }}
+            .x-card-size
+              p {{ file.size | prettyBytes }}
+            .x-card-button
+              a.card-button(@click='removeFile(file)') Remove
     b-loading(:active.sync='unbundling' :canCancel='false')
 </template>
 
@@ -90,7 +91,7 @@
 
       currentFiles: {
         get() {
-          if (this.files.length <= 0) return []; // Bail out if empty. Improves perfomance.
+          if (this.files.length <= 0) return [];
 
           const current = this.current;
           const step = this.perPage;
@@ -170,9 +171,48 @@
 </script>
 
 <style lang='scss' scoped>
+  .drop-area {
+    height: 100%;
+    width: 100%;
+    border: 2px dashed #cbcbcb;
+  };
+
+  .is-invisible {
+    visibility: collapse;
+  };
+
+  .x-container {
+    max-height: 435px;
+    height: 100%;
+    margin: 0;
+    display: grid;
+    grid-template-areas:
+      'pagination'
+      'cards';
+    grid-template-rows: 10% 90%;
+    grid-gap: 16px;
+  }
+
+  .x-pagination {
+    grid-area: pagination;
+  }
+
+  .x-cards {
+    grid-area: cards;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-gap: 8px;
+  }
+
+  .x-card {
+    display: grid;
+    grid-template-rows: 150px 1fr;
+  }
+
   .card-image {
     background-color: #cbcbcb;
-    height: 150px;
   };
 
   /* dim-overlay found on: https://codepen.io/philcheng/pen/YWyYwG */
@@ -216,45 +256,52 @@
     left: 0;
   };
 
-  .card-footer-item {
+  .x-card-content {
+    display: grid;
+    margin: 0;
+    padding: 2px;
+    font-size: 6pt;
+    max-height: 100%;
+    overflow: hidden;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 33%);
+    grid-template-areas:
+      'title title'
+      'ext size'
+      'button button';
+  }
+
+  .x-card-ext {
+    grid-area: ext;
+  }
+
+  .x-card-size {
+    grid-area: size;
+    justify-self: end;
+  }
+
+  .x-card-title {
+    text-overflow: wrap;
+    grid-area: title;
+  }
+
+  .x-card-button {
+    display: grid;
+    border-top: 1px outset;
+    grid-area: button;
+    justify-self: stretch;
+  }
+
+  .x-card-button > a {
     color: red;
-    font-size: 8px;
-  };
+    justify-self: center;
+  }
 
-  .card-content {
-    padding: 4px;
-  };
-
-  .is-4 {
-    font-size: 12px;
-  };
-
-  .is-6 {
-    font-size: 8px;
-    margin-bottom: 4px;
-  };
-
-  .column {
-    padding: 5px;
-  };
-
-  .title {
+  .x-card-title > .title {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  };
-
-  .fixed-height {
-    height: 430px !important;
-  };
-
-  .drop-area {
-    width: 100%;
-    position: relative;
-    border: 2px dashed #cbcbcb;
-  };
-
-  .is-invisible {
-    visibility: collapse;
-  };
+    font-size: 1.2em;
+    font-weight: bold;
+  }
 </style>

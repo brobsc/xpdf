@@ -1,6 +1,6 @@
 <template lang='pug'>
   #app(@dragover.prevent='' @drop.stop.prevent='addFiles')
-      router-view
+    router-view
 </template>
 
 <script src='./App.vue.js'>
@@ -20,15 +20,17 @@
 
 body {
   margin: 0px;
+  min-width: 100%;
+  min-height: 100%;
   height: 100%;
-  width: 100%;
   padding: 0px;
   position: fixed;
   overflow: scroll;
 };
 #app {
-  margin: 0px;
-  padding: 48px;
+  display: grid;
   height: 100%;
+  overflow: hidden;
+  padding: 48px 32px 32px 32px;
 }
 </style>

@@ -3,6 +3,7 @@
     .display-panel
       h1.title sPDF
       p Files: {{ files.length }}
+      a.button.is-small Add files
     .settings-panel
       settings-panel
     .preview-cards
@@ -36,7 +37,7 @@
   .x-container {
     display: grid;
     height: 100%;
-    grid-template-columns: 30% 70%;
+    grid-template-columns: 1.5fr 4fr;
     grid-template-rows: 2fr 435px 1fr;
     grid-template-areas:
       'display-panel settings-panel'
@@ -47,6 +48,8 @@
 
   .display-panel {
     grid-area: display-panel;
+    display: grid;
+    grid-gap: 4px;
   };
 
   .settings-panel {
@@ -60,4 +63,9 @@
   .bundler-buttons {
     grid-area: bundler-buttons;
   };
+
+  .title {
+    padding: 0;
+    margin: 0;
+  }
 </style>

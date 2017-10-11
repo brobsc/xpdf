@@ -1,11 +1,13 @@
 <template lang='pug'>
   div(:class='{ "drop-area": isEmpty}')
+    .x-drop-message(v-if='isEmpty')
+      p You can also drop files here...
     .x-container
       .x-pagination
         b-pagination(:total='files.length' :current.sync='current' :per-page='perPage'
           :size='size' :order='order' :simple='true' :class='{ "is-invisible": !needsPagination }')
       .x-cards.dragula-container(v-dragula='currentFiles'
-                                        drake='currentFiles')
+                                 drake='currentFiles')
         .x-card.card(v-for='file in currentFiles' :key='file.name')
           .card-image
             img(src='http://via.placeholder.com/106x150' :ref='file.name')
@@ -17,8 +19,9 @@
                 span.icon.is-small
                   i.fa.fa-undo
           .x-card-content
+            p.tooltip-text {{ file.realPath }}
             .x-card-title
-              p.title {{ file.name }}
+              .title {{ file.name }}
             .x-card-ext
               p {{ getExtension(file) }}
             .x-card-size
@@ -32,9 +35,10 @@
   import tools from '../../lib/PDFTools.js';
 
   export default {
+    name: 'preview-cards',
+
     data() {
       return {
-        name: 'preview-cards',
         current: 1,
         size: 'is-small',
         perPage: 8,
@@ -245,6 +249,33 @@
     opacity: 1;
   }
 
+  .x-card-title {
+    overflow: overlay;
+  }
+
+  .x-card-content > .tooltip-text {
+    opacity: 0;
+    max-width: 100%;
+    padding: 4px;
+    overflow: visible;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    transition: opacity .5s ease;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    background-color: #666;
+    border-radius: 5%;
+    position: absolute;
+    bottom: 48px;
+    right: 0;
+    left: 0;
+  }
+
+  .x-card-content:hover .tooltip-text {
+    opacity: 1;
+  }
+
   img {
     max-height: 100%;
     width: 100%;
@@ -281,7 +312,6 @@
   }
 
   .x-card-title {
-    text-overflow: wrap;
     grid-area: title;
   }
 
@@ -303,5 +333,16 @@
     white-space: nowrap;
     font-size: 1.2em;
     font-weight: bold;
+  }
+
+  .x-drop-message {
+    height: 100%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+
+    p {
+      color: #cbcbcb;
+    }
   }
 </style>

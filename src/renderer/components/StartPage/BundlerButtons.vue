@@ -8,7 +8,7 @@
     .x-button.control
       button.is-small.button(@click='clearFiles') Clear
     .x-button.control
-      button.is-small.button(@click='unbundle') Unbundle
+      button.is-small.button(@click='openPreview') Unbundle
     .gutter
     .gutter
     .gutter
@@ -16,11 +16,13 @@
 
 <script>
   import tools from '../../lib/PDFTools.js';
+  const { BrowserWindow } = require('electron').remote; // eslint-disable-line
 
   export default {
+    name: 'bundler-buttons',
+
     data() {
       return {
-        name: 'bundler-buttons',
         isGenerating: false,
       };
     },
@@ -58,8 +60,33 @@
             console.log(list); // eslint-disable-line
           }
         });
-
         this.isGenerating = false;
+      },
+
+      openPreview() {
+        const top = require('electron').remote.getCurrentWindow().id; // eslint-disable-line
+        const winProperties = {
+          parent: top,
+          modal: true,
+          show: true,
+          titleBarStyle: 'hidden-inset',
+          minHeight: 494,
+          maxHeight: 494,
+          height: 494,
+          minWidth: 700,
+          maxWidth: 700,
+          width: 700,
+          webPreferences: {
+            webSecurity: false,
+          },
+        };
+        const child = new BrowserWindow(winProperties);
+        let winURL = process.env.NODE_ENV === 'development' // eslint-disable-line
+          ? 'http://localhost:9080'
+          : `file://${__dirname}/index.html`;
+
+        child.loadURL(winURL);
+        child.webContents.executeJavaScript('location.href += "preview"');
       },
 
       // TODO: It's a mess of awaits and promises
@@ -73,8 +100,10 @@
           return f;
         }));
 
-        tools.convertToPDF(await images, { quality: 100, contrast: this.contrast });
+        const pdfs = tools.convertToPDF(await images, { quality: 100, contrast: this.contrast });
 
+        this.$store.commit('addPDF', pdfs[0]);
+        this.$store.commit('addPDF', pdfs[1]);
         this.isGenerating = false;
       },
     },

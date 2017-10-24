@@ -146,6 +146,7 @@ export default {
           -extent 595x842\
           -density 96x96\
           -resample 96x96\
+          -define jpeg:preserve-settings\
           '${firstMethodPath}'`;
 
     const command2 = `img2pdf ${allPaths} --without-pdfrw -f shrink -S A4 -o '${secondMethodPath}'`;

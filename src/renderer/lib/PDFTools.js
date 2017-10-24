@@ -133,6 +133,9 @@ export default {
     if (options.contrast === 'decrease') contrastString = '-contrast -contrast';
     else if (options.contrast === 'increase') contrastString = '+contrast +contrast';
 
+    const firstMethodPath = `${FolderTools.pdfsDir()}01.pdf`;
+    const secondMethodPath = `${FolderTools.pdfsDir()}02.pdf`;
+
     const command1 = `gm convert\
           ${allPaths}\
           ${contrastString}\
@@ -143,21 +146,15 @@ export default {
           -extent 595x842\
           -density 96x96\
           -resample 96x96\
-          /Users/bruno/Desktop/temp.pdf`;
+          '${firstMethodPath}'`;
 
-    const command2 = `img2pdf ${allPaths} --without-pdfrw -f shrink -S A4 -o /Users/bruno/Desktop/temp2.pdf`;
+    const command2 = `img2pdf ${allPaths} --without-pdfrw -f shrink -S A4 -o '${secondMethodPath}'`;
 
     execa.shellSync(command1);
     execa.shellSync(command2);
 
-    console.log(fs.statSync('/Users/bruno/Desktop/temp.pdf').size * 0.001); // eslint-disable-line
-    console.log(fs.statSync('/Users/bruno/Desktop/temp2.pdf').size * 0.001); // eslint-disable-line
-
-    const result1 = await this.pdfGenerator('/Users/bruno/Desktop/temp.pdf');
-    const result2 = await this.pdfGenerator('/Users/bruno/Desktop/temp2.pdf');
-
-    console.log(result1.size); // eslint-disable-line
-    console.log(result2.size); // eslint-disable-line
+    const result1 = await this.pdfGenerator(firstMethodPath);
+    const result2 = await this.pdfGenerator(secondMethodPath);
 
     return [result1, result2];
   },

@@ -20,7 +20,8 @@
       .x-card-size
         p {{ file.size | prettyBytes }}
       .x-card-button
-        a.card-button(@click='cardAction(file)' :style='{ color: cardActionColor }') Remove
+        a.card-button(@click='cardAction(file)' :class='cardActionClass')
+          | {{ cardActionText }}
 </template>
 
 <script>
@@ -66,9 +67,9 @@
         default: true,
       },
 
-      cardActionColor: {
+      cardActionClass: {
         type: String,
-        default: 'red',
+        default: 'is-danger',
       },
 
       cardHeight: {
@@ -79,6 +80,11 @@
       cardFontSize: {
         type: Number,
         default: 6,
+      },
+
+      cardActionText: {
+        type: String,
+        default: 'Remove',
       },
     },
 
@@ -268,5 +274,13 @@
     white-space: nowrap;
     font-size: 1.2em;
     font-weight: bold;
+  }
+
+  .x-card-button > a.is-danger {
+    color: hsl(348, 100%, 61%);
+  }
+
+  .x-card-button > a.is-primary {
+    color: hsl(171, 100%, 41%);
   }
 </style>

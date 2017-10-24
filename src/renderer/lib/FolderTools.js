@@ -19,6 +19,10 @@ export default {
     return `${this.dirString()}THUMBS${sep}`;
   },
 
+  pdfsDir() {
+    return `${this.dirString()}PDFS${sep}`;
+  },
+
   userData() {
     return app.getPath('userData');
   },
@@ -35,6 +39,7 @@ export default {
     await this.createFolder('ROTATED');
     await this.createFolder('EXTRACTED');
     await this.createFolder('THUMBS');
+    await this.createFolder('PDFS');
   },
 
   async createFolder(name) {

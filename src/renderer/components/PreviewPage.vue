@@ -6,15 +6,18 @@
       base-card(v-for='pdf in pdfs' :key='pdf.name'
       :file='pdf'
       :pdf-action='openPDF' pdf-action-icon='expand'
-      :card-action='goBack'
+      :card-action='savePDF'
       :card-height='300'
       :card-font-size='12'
+      card-action-class='is-primary',
+      card-action-text='Save',
       :showTooltip='false')
     .controls
 </template>
 
 <script>
   import PDFWindow from 'electron-pdf-window';
+  import fs from 'fs';
   import BaseCard from './BaseCard.vue';
 
   export default {
@@ -56,6 +59,21 @@
         PDFWindow.addSupport(win);
 
         win.loadURL(path);
+      },
+
+      async savePDF(file) {
+        const { dialog } = require('electron').remote; // eslint-disable-line
+        const { app } = require('electron').remote; // eslint-disable-line
+        const { sep } = require('path');
+
+        const savePath = `${app.getPath('documents')}${sep}${file.name}`;
+        const fileContents = fs.readFileSync(file.realPath);
+
+        const chosenPath = await dialog.showSaveDialog({
+          defaultPath: savePath,
+        });
+
+        fs.writeFileSync(chosenPath, fileContents);
       },
     },
 

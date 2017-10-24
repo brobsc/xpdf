@@ -1,16 +1,17 @@
 <template lang='pug'>
-  .x-card.card
+  .x-card.card(:style="{ gridTemplateRows: cardHeight + 'px 1fr' }")
     .card-image
-      img(v-if='thumbReady' :src='thumbSrc')
+      img(v-if='thumbReady' :src='thumbSrc + "#" + new Date().getTime()')
       img(v-else src='http://via.placeholder.com/106x150')
       .dim-overlay
-        a.button.is-small.is-primary(:class="{'is-loading': unbundling}" v-if='isPDF(file)' @click='pdfAction(file)')
+        span.tag.is-danger(v-bind:style='styleObject') PDF
+        a.button.is-primary(:class="{'is-loading': unbundling}" v-if='isPDF(file)' @click='pdfAction(file)')
           span.icon.is-small
             i.fa(:class="'fa-' + pdfActionIcon")
-        a.button.is-small.is-primary(:class="{'is-loading': rotating}" v-if='!isPDF(file)' @click='imgAction(file)')
+        a.button.is-primary(:class="{'is-loading': rotating}" v-if='!isPDF(file)' @click='imgAction(file)')
           span.icon.is-small
             i.fa(:class="'fa-' + imgActionIcon")
-    .x-card-content
+    .x-card-content(:style="{ fontSize: cardFontSize + 'pt', padding: (cardFontSize / 2) + 'px'}")
       p.tooltip-text(v-if='showTooltip') {{ file.realPath }}
       .x-card-title
         .title {{ file.name }}
@@ -69,6 +70,16 @@
         type: String,
         default: 'red',
       },
+
+      cardHeight: {
+        type: Number,
+        default: 150,
+      },
+
+      cardFontSize: {
+        type: Number,
+        default: 6,
+      },
     },
 
     data() {
@@ -80,12 +91,28 @@
       };
     },
 
+    watch: {
+      $props(newVal, oldVal) { // eslint-disable-line
+        console.log('I CHANGED'); // eslint-disable-line
+      },
+    },
+
     computed: {
+      styleObject() {
+        if (this.isPDF(this.file)) {
+          return {
+            visibility: 'visibile',
+          };
+        }
+        return {
+          visibility: 'hidden',
+        };
+      },
     },
 
     methods: {
       async generateThumb() {
-        const thumb = await tools.createPDFThumbnail(this.file);
+        const thumb = await tools.createPDFThumbnail(this.file, { heightSize: this.cardHeight });
 
         this.thumbSrc = `file:///${thumb.realPath}`;
         this.thumbReady = true;
@@ -103,6 +130,7 @@
     },
 
     created() {
+      this.thumbReady = false;
       this.generateThumb();
     },
   };
@@ -111,7 +139,6 @@
 <style lang='scss' scoped>
   .x-card {
     display: grid;
-    grid-template-rows: 150px 1fr;
   };
 
   .card-image {
@@ -129,23 +156,34 @@
     transition: background 0.5s ease;
   }
 
+  .dim-overlay {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+  }
+
   .card-image a.button {
-    opacity: 0;
     transition: opacity .5s ease;
-    margin: auto;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 35%;
+    justify-self: center;
+    align-self: center;
+    opacity: 0;
+  }
+
+  .card-image .tag {
+    transition: opacity .5s ease;
+    justify-self: right;
   }
 
   .card-image:hover .dim-overlay {
-    display: block;
     background: rgba(1000, 1000, 1000, .6);
   }
 
   .card-image:hover a.button {
     opacity: 1;
+  }
+
+  .card-image:hover .tag {
+    opacity: 0;
+    visibility: hidden;
   }
 
   .x-card-title {
@@ -160,7 +198,6 @@
     word-wrap: break-word;
     white-space: pre-wrap;
     transition: opacity .5s ease;
-    font-size: 1em;
     font-weight: bold;
     color: white;
     background-color: #666;
@@ -191,8 +228,6 @@
   .x-card-content {
     display: grid;
     margin: 0;
-    padding: 2px;
-    font-size: 6pt;
     max-height: 100%;
     overflow: hidden;
     grid-template-columns: repeat(2, 1fr);
@@ -235,4 +270,3 @@
     font-weight: bold;
   }
 </style>
-

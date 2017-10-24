@@ -35,7 +35,6 @@
         order: 'is-centered',
         unbundling: false,
         rotating: false,
-        oldFiles: [],
       };
     },
 

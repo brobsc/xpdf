@@ -11,6 +11,11 @@ export default new Router({
       component: require('@/components/StartPage'),
     },
     {
+      path: '/preview',
+      name: 'preview-page',
+      component: require('@/components/PreviewPage.vue'),
+    },
+    {
       path: '*',
       redirect: '/',
     },

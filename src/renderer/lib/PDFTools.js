@@ -6,7 +6,13 @@ import readChunk from 'read-chunk';
 import FolderTools from './FolderTools.js';
 
 export default {
-  async createPDFThumbnail(file) {
+  async createPDFThumbnail(file, userOptions = {}) {
+    let options = {
+      heightSize: 150,
+    };
+
+    options = this.optionsConstructor(options, userOptions);
+
     if (this.getFileExtension(file.realPath) !== 'pdf') return file;
 
     const newName = `${this.getFileName(file.realPath)}-thumb.jpg`;
@@ -15,9 +21,9 @@ export default {
 
     const command1 = `gm convert\
           '${file.realPath}'[0]\
-          -size 'x150'\
+          -size 'x${options.heightSize}'\
           -compress JPEG\
-          -geometry 'x150'\
+          -geometry 'x${options.heightSize}'\
           '${newPath}'`;
 
     execa.shellSync(command1);
@@ -32,6 +38,17 @@ export default {
     const fileName = this.getFileNameAndExtension(path);
     const f = new File([contents], fileName, {
       type: 'image/jpg',
+    });
+    f.realPath = path;
+
+    return f;
+  },
+
+  async pdfGenerator(path) {
+    const contents = fs.readFileSync(path);
+    const fileName = this.getFileNameAndExtension(path);
+    const f = new File([contents], fileName, {
+      type: 'application/pdf',
     });
     f.realPath = path;
 
@@ -135,6 +152,14 @@ export default {
 
     console.log(fs.statSync('/Users/bruno/Desktop/temp.pdf').size * 0.001); // eslint-disable-line
     console.log(fs.statSync('/Users/bruno/Desktop/temp2.pdf').size * 0.001); // eslint-disable-line
+
+    const result1 = await this.pdfGenerator('/Users/bruno/Desktop/temp.pdf');
+    const result2 = await this.pdfGenerator('/Users/bruno/Desktop/temp2.pdf');
+
+    console.log(result1.size); // eslint-disable-line
+    console.log(result2.size); // eslint-disable-line
+
+    return [result1, result2];
   },
 
   getSize(file) {
